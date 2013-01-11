@@ -10,7 +10,7 @@
     <groupId>org.hudsonci.plugins</groupId>
     <artifactId>active-directory</artifactId>
     <packaging>hpi</packaging>
-    <version>1.31-h1</version>
+    <version>1.31-h2-SNAPSHOT</version>
     <name>Active Directory plugin</name>
     <description>With this plugin, you can configure Hudson to authenticate the username and the password through Active Directory.</description>
     <url>http://wiki.hudson-ci.org/display/HUDSON/Active+Directory+Plugin</url>
