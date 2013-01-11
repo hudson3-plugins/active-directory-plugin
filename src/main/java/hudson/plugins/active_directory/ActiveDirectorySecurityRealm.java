@@ -4,7 +4,6 @@ import static hudson.Util.fixEmpty;
 import static hudson.plugins.active_directory.ActiveDirectoryUnixAuthenticationProvider.toDC;
 
 import com4j.typelibs.ado20.ClassFactory;
-import groovy.lang.Binding;
 import hudson.Extension;
 import hudson.Functions;
 import hudson.Util;
@@ -16,7 +15,6 @@ import hudson.security.SecurityRealm;
 import hudson.security.TokenBasedRememberMeServices2;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
-import hudson.util.spring.BeanBuilder;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,25 +39,27 @@ import javax.naming.ldap.StartTlsRequest;
 import javax.naming.ldap.StartTlsResponse;
 import javax.net.ssl.SSLSocketFactory;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.acegisecurity.Authentication;
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.AuthenticationManager;
-import org.acegisecurity.BadCredentialsException;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.BadCredentialsException;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.springframework.dao.DataAccessException;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.sun.jndi.ldap.LdapCtxFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.eclipse.hudson.security.HudsonSecurityEntitiesHolder;
+import org.springframework.security.providers.AuthenticationProvider;
+import org.springframework.security.providers.ProviderManager;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
+import org.springframework.security.providers.rememberme.RememberMeAuthenticationProvider;
+import org.springframework.security.ui.rememberme.RememberMeAuthenticationException;
 
 /**
  * {@link SecurityRealm} that talks to Active Directory.
@@ -124,29 +124,58 @@ public class ActiveDirectorySecurityRealm extends AbstractPasswordBasedSecurityR
     }
 
     public SecurityComponents createSecurityComponents() {
-        BeanBuilder builder = new BeanBuilder(getClass().getClassLoader());
-        Binding binding = new Binding();
-        binding.setVariable("realm", this);
-        builder.parse(getClass().getResourceAsStream("ActiveDirectory.groovy"), binding);
-        WebApplicationContext context = builder.createApplicationContext();
+        
+        final AbstractActiveDirectoryAuthenticationProvider adp;
+        UserDetailsService uds;
+        if(this.getDescriptor().canDoNativeAuth() && this.domain == null){
+            adp = new ActiveDirectoryAuthenticationProvider();
+            uds = adp;
+        }else{
+            adp = new ActiveDirectoryUnixAuthenticationProvider(this); 
+            uds = adp;
+        }
 
-        final AbstractActiveDirectoryAuthenticationProvider adp = findBean(AbstractActiveDirectoryAuthenticationProvider.class, context);
-        final UserDetailsService uds = findBean(UserDetailsService.class, context);
 
         TokenBasedRememberMeServices2 rms = new TokenBasedRememberMeServices2() {
-            public Authentication autoLogin(HttpServletRequest request, HttpServletResponse response) {
-                // no supporting auto-login unless we can do retrieveUser. See JENKINS-11643.
-                if (adp.canRetrieveUserByName())
-                    return super.autoLogin(request, response);
-                else
-                    return null;
+            @Override
+            public UserDetails processAutoLoginCookie(String[] cookieTokens,
+                    HttpServletRequest request,
+                    HttpServletResponse response)
+                    throws RememberMeAuthenticationException,
+                    UsernameNotFoundException {
+                if (adp.canRetrieveUserByName()){
+                    return super.processAutoLoginCookie(cookieTokens, request, response);
+                }else{
+                    throw new UsernameNotFoundException("Could not retrieve User by Name");
+                }
+
             }
         };
+   
         rms.setUserDetailsService(uds);
         rms.setKey(Hudson.getInstance().getSecretKey());
         rms.setParameter("remember_me"); // this is the form field name in login.jelly
+        
+        // these providers apply everywhere
+        RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider();
+        rememberMeAuthenticationProvider.setKey(HudsonSecurityEntitiesHolder.getHudsonSecurityManager().getSecretKey());
 
-        return new SecurityComponents( findBean(AuthenticationManager.class, context), uds, rms);
+        // this doesn't mean we allow anonymous access.
+        // we just authenticate anonymous users as such,
+        // so that later authorization can reject them if so configured
+        AnonymousAuthenticationProvider anonymousAuthenticationProvider = new AnonymousAuthenticationProvider();
+        anonymousAuthenticationProvider.setKey("anonymous");
+        
+        AuthenticationProvider[] authenticationProvider = {
+            adp,
+            rememberMeAuthenticationProvider,
+            anonymousAuthenticationProvider
+        };
+
+        ProviderManager providerManager = new ProviderManager();
+        providerManager.setProviders(Arrays.asList(authenticationProvider));
+
+        return new SecurityComponents(providerManager, uds, rms);
     }
 
     @Override

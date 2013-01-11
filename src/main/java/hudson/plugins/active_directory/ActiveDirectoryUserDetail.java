@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 
 import hudson.tasks.Mailer;
 import hudson.tasks.Mailer.UserProperty;
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.userdetails.User;
-import org.acegisecurity.userdetails.UserDetails;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.userdetails.User;
+import org.springframework.security.userdetails.UserDetails;
 
 /**
  * @author Kohsuke Kawaguchi

@@ -1,11 +1,11 @@
 package hudson.plugins.active_directory;
 
-import org.acegisecurity.AuthenticationException;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.providers.dao.AbstractUserDetailsAuthenticationProvider;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.AuthenticationException;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.providers.dao.AbstractUserDetailsAuthenticationProvider;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.springframework.dao.DataAccessException;
 
 /**

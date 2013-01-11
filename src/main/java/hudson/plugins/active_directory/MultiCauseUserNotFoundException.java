@@ -2,7 +2,7 @@ package hudson.plugins.active_directory;
 
 import com.google.common.collect.ImmutableList;
 import hudson.util.FlushProofOutputStream;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;

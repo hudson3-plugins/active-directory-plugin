@@ -5,7 +5,7 @@ import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.security.SecurityRealm;
 import hudson.tasks.MailAddressResolver;
-import org.acegisecurity.AcegiSecurityException;
+import org.springframework.security.SpringSecurityException;
 import org.springframework.dao.DataAccessException;
 
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class ActiveDirectoryMailAddressResolverImpl extends
 		} catch (DataAccessException e) {
 			LOGGER.log(FINE, "Failed to look Active Directory for e-mail address", e);
 			return null;
-		} catch (AcegiSecurityException e) {
+		} catch (SpringSecurityException e) {
 			LOGGER.log(FINE, "Failed to look up Active Directory for e-mail address", e);
 			return null;
 		}
