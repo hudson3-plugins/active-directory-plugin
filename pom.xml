@@ -1,61 +1,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.jenkins-ci.plugins</groupId>
-    <artifactId>plugin</artifactId>
-    <version>1.424</version>
-  </parent>
+    <parent>
+        <groupId>org.eclipse.hudson.plugins</groupId>
+        <artifactId>hudson-plugin-parent</artifactId>
+        <version>3.0.0</version>
+    </parent>
 
-  <artifactId>active-directory</artifactId>
-  <packaging>hpi</packaging>
-  <version>1.31-SNAPSHOT</version>
-  <name>Jenkins Active Directory plugin</name>
-  <url>http://wiki.jenkins-ci.org/display/JENKINS/Active+Directory+Plugin</url>
+    <groupId>org.hudsonci.plugins</groupId>
+    <artifactId>active-directory</artifactId>
+    <packaging>hpi</packaging>
+    <version>1.31-h1-SNAPSHOT</version>
+    <name>Active Directory plugin</name>
+    <description>With this plugin, you can configure Hudson to authenticate the username and the password through Active Directory.</description>
+    <url>http://wiki.hudson-ci.org/display/HUDSON/Active+Directory+Plugin</url>
 
-  <scm>
-   <connection>scm:git:git://github.com/jenkinsci/active-directory-plugin.git</connection>
-   <developerConnection>scm:git:git@github.com:jenkinsci/active-directory-plugin.git</developerConnection>
-   <url>https://github.com/jenkinsci/active-directory-plugin</url>
-  </scm>
+    <scm>
+        <connection>scm:git:git://github.com/hudson3-plugins/active-directory-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:hudson3-plugins/active-directory-plugin.git</developerConnection>
+        <url>https://github.com/hudson3-plugins/active-directory-plugin</url>
+    </scm>
 
-  <developers>
-    <developer>
-      <id>kohsuke</id>
-      <name>Kohsuke Kawaguchi</name>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>wjprakash</id>
+            <name>Winston Prakash</name>
+            <roles>
+                <role>
+                    Maintainer
+                </role>
+            </roles>
+            <email>
+                winston.prakash@gmail.com
+            </email>
+        </developer>
+        <developer>
+            <id>kohsuke</id>
+            <name>Kohsuke Kawaguchi</name>
+        </developer>
+    </developers>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.jvnet.com4j.typelibs</groupId>
-      <artifactId>ado20</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jvnet.com4j.typelibs</groupId>
-      <artifactId>active-directory</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jvnet.com4j</groupId>
-      <artifactId>com4j</artifactId>
-      <version>20120426-2</version>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.jvnet.com4j.typelibs</groupId>
+            <artifactId>ado20</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.com4j.typelibs</groupId>
+            <artifactId>active-directory</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.com4j</groupId>
+            <artifactId>com4j</artifactId>
+            <version>20110320</version>
+        </dependency>
+    </dependencies>
 
-  <repositories>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>  
 
