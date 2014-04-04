@@ -1,5 +1,6 @@
 package hudson.plugins.active_directory;
 
+import com.sun.jndi.ldap.LdapCtxFactory;
 import static hudson.Util.fixEmpty;
 import static hudson.plugins.active_directory.ActiveDirectoryUnixAuthenticationProvider.toDC;
 
@@ -39,27 +40,27 @@ import javax.naming.ldap.StartTlsRequest;
 import javax.naming.ldap.StartTlsResponse;
 import javax.net.ssl.SSLSocketFactory;
 import javax.servlet.ServletException;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-import org.springframework.dao.DataAccessException;
 
-import com.sun.jndi.ldap.LdapCtxFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.eclipse.hudson.security.HudsonSecurityEntitiesHolder;
-import org.springframework.security.providers.AuthenticationProvider;
-import org.springframework.security.providers.ProviderManager;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider;
-import org.springframework.security.providers.rememberme.RememberMeAuthenticationProvider;
-import org.springframework.security.ui.rememberme.RememberMeAuthenticationException;
+
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.AnonymousAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
 
 /**
  * {@link SecurityRealm} that talks to Active Directory.

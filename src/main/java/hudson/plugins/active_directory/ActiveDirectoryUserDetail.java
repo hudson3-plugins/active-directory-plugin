@@ -5,10 +5,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import hudson.tasks.Mailer;
-import hudson.tasks.Mailer.UserProperty;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.User;
-import org.springframework.security.userdetails.UserDetails;
+import java.util.Arrays;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -27,7 +27,7 @@ public class ActiveDirectoryUserDetail extends User {
 		// we don't know the password so we need to set some dummy. See #1229
 		super(username, password != null ? password : "PASSWORD", enabled,
 				accountNonExpired, credentialsNonExpired, accountNonLocked,
-				authorities);
+				Arrays.asList(authorities));
 
         this.displayName = displayName;
         this.mail = mail;

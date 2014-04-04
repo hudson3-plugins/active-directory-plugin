@@ -2,12 +2,12 @@ package hudson.plugins.active_directory;
 
 import com.google.common.collect.ImmutableList;
 import hudson.util.FlushProofOutputStream;
-import org.springframework.security.AuthenticationException;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * {@link AuthenticationException} that supports multiple nested causes.

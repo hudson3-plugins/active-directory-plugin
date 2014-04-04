@@ -5,12 +5,11 @@ import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.security.SecurityRealm;
 import hudson.tasks.MailAddressResolver;
-import org.springframework.security.SpringSecurityException;
-import org.springframework.dao.DataAccessException;
-
-import java.util.logging.Logger;
 
 import static java.util.logging.Level.*;
+import java.util.logging.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.AuthenticationException;
 
 /**
  * If the security realm is Active Directory, try to pick up e-mail
@@ -36,7 +35,7 @@ public class ActiveDirectoryMailAddressResolverImpl extends
 		} catch (DataAccessException e) {
 			LOGGER.log(FINE, "Failed to look Active Directory for e-mail address", e);
 			return null;
-		} catch (SpringSecurityException e) {
+		} catch (AuthenticationException e) {
 			LOGGER.log(FINE, "Failed to look up Active Directory for e-mail address", e);
 			return null;
 		}
