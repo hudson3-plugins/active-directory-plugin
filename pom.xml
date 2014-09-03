@@ -4,18 +4,18 @@
     <parent>
         <groupId>org.eclipse.hudson.plugins</groupId>
         <artifactId>hudson-plugin-parent</artifactId>
-        <version>3.2.0-M0</version>
+        <version>3.2.0</version>
     </parent>
 
     <groupId>org.hudsonci.plugins</groupId>
     <artifactId>active-directory</artifactId>
     <packaging>hpi</packaging>
-    <version>1.31-h3-SNAPSHOT</version>
+    <version>1.31-h3</version>
     <name>Active Directory plugin</name>
     <description>
         With this plugin, you can configure Hudson to authenticate the username and the password 
         through Active Directory.
-        Version 1.31-h2 requires Hudson version 3.2.0 or higher
+        Version 1.31-h3 requires Hudson version 3.2.0 or higher
     </description>
     <url>http://wiki.hudson-ci.org/display/HUDSON/Active+Directory+Plugin</url>
 
